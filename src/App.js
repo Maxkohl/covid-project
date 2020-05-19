@@ -87,12 +87,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <Chart
-            title="Top 10 Countries with Confirmed Cases"
-            chartData={this.state.chartData}
-          />
-        </header>
+        <Chart
+          title="Top 10 Countries with Confirmed Cases"
+          chartData={this.state.chartData}
+        />
+        <header className="App-header"></header>
       </div>
     );
   }

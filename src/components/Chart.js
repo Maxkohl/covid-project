@@ -14,7 +14,7 @@ class Chart extends Component {
           data={this.props.chartData}
           options={{
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
             title: {
               display: true,
               text: this.props.title,
