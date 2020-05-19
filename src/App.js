@@ -39,7 +39,7 @@ class App extends Component {
             };
           })
             .sort((a, b) => b.TotalConfirmed - a.TotalConfirmed)
-            .slice(0, 6);
+            .slice(0, 11);
 
           const totalConfirmed = fileteredData.reduce(
             (a, b) => a + b.TotalConfirmed,
@@ -54,13 +54,7 @@ class App extends Component {
               datasets: [
                 {
                   label: "Test",
-                  backgroundColor: [
-                    "#B21F00",
-                    "#C9DE00",
-                    "#2FDE00",
-                    "#00A6B4",
-                    "#6800B4",
-                  ],
+                  backgroundColor: fileteredData.map(this.getRandomHex),
                   hoverBackgroundColor: [
                     "#501800",
                     "#4B5000",
