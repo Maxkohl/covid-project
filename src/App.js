@@ -14,18 +14,67 @@ class App extends Component {
     this.getChartData();
   }
 
+  getCountryLabel(countryData, totalConfirmedAllCountries) {
+    const percentageOfCases = (
+      (countryData.TotalConfirmed / totalConfirmedAllCountries) *
+      100
+    ).toFixed(2);
+
+    return `${countryData.Country}: ${percentageOfCases}%`;
+  }
+
+  getRandomHex() {
+    return "#" + Math.floor(Math.random() * 16777215).toString(16);
+  }
+
   getChartData() {
     fetch("https://api.covid19api.com/summary")
       .then((res) => res.json())
       .then(
         (result) => {
+          const fileteredData = result.Countries.map((data) => {
+            return {
+              Country: data.Country,
+              TotalConfirmed: data.TotalConfirmed,
+            };
+          })
+            .sort((a, b) => b.TotalConfirmed - a.TotalConfirmed)
+            .slice(0, 6);
+
+          const totalConfirmed = fileteredData.reduce(
+            (a, b) => a + b.TotalConfirmed,
+            0
+          );
+
           this.setState({
-            chartData: result,
+            chartData: {
+              labels: fileteredData.map((data) =>
+                this.getCountryLabel(data, totalConfirmed)
+              ),
+              datasets: [
+                {
+                  label: "Test",
+                  backgroundColor: [
+                    "#B21F00",
+                    "#C9DE00",
+                    "#2FDE00",
+                    "#00A6B4",
+                    "#6800B4",
+                  ],
+                  hoverBackgroundColor: [
+                    "#501800",
+                    "#4B5000",
+                    "#175000",
+                    "#003350",
+                    "#35014F",
+                  ],
+                  data: fileteredData.map((data) => data.TotalConfirmed),
+                },
+              ],
+            },
           });
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
+
         (error) => {
           this.setState({
             isLoaded: true,
@@ -35,40 +84,14 @@ class App extends Component {
       );
   }
 
-  // getChartData() {
-  //   //insert API ajax call here after testing with dummy data
-  //   this.setState({
-  //     chartData: {
-  //       labels: ["January", "February", "March", "April", "May"],
-  //       datasets: [
-  //         {
-  //           label: "Rainfall",
-  //           backgroundColor: [
-  //             "#B21F00",
-  //             "#C9DE00",
-  //             "#2FDE00",
-  //             "#00A6B4",
-  //             "#6800B4",
-  //           ],
-  //           hoverBackgroundColor: [
-  //             "#501800",
-  //             "#4B5000",
-  //             "#175000",
-  //             "#003350",
-  //             "#35014F",
-  //           ],
-  //           data: [65, 59, 80, 81, 56],
-  //         },
-  //       ],
-  //     },
-  //   });
-  // }
-
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <Chart chartData={this.state.chartData} />
+          <Chart
+            title="Top 10 Countries with Confirmed Cases"
+            chartData={this.state.chartData}
+          />
         </header>
       </div>
     );

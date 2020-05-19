@@ -1,23 +1,23 @@
 import React, { Component } from "react";
-import { Pie } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 
 class Chart extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      chartData: props.chartData,
-    };
+    this.state = {};
   }
 
   render() {
     return (
       <div>
-        <Pie
-          data={this.state.chartData}
+        <Doughnut
+          data={this.props.chartData}
           options={{
+            responsive: true,
+            maintainAspectRatio: false,
             title: {
               display: true,
-              text: "Average Rainfall per month",
+              text: this.props.title,
               fontSize: 20,
             },
             legend: {
