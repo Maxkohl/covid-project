@@ -10,7 +10,7 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import PieChart from "./PieChart";
+import TopTenPieChart from "./TopTenPieChart";
 
 const drawerWidth = 240;
 
@@ -57,9 +57,7 @@ class Sidebar extends Component {
 
     switch (this.state.show) {
       case "top":
-        content = (
-          <PieChart chartData={this.props.chartData} title="Top 10 Countries" />
-        );
+        content = <TopTenPieChart />;
         break;
       default:
         content = <h1>Select a Chart</h1>;
