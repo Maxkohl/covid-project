@@ -2,6 +2,36 @@ import React, { Component } from "react";
 import LineChart from "./LineChart";
 
 class ActiveCasesLineChart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      chartData: {},
+    };
+  }
+
+  componentWillMount() {
+    this.getChartData();
+  }
+
+  getDateLabel(timeStamp) {
+    const date = new Date(timeStamp);
+    const months = {
+      "1": "Jan",
+      "2": "Feb",
+      "3": "Mar",
+      "4": "Apr",
+      "5": "May",
+      "6": "Jun",
+      "7": "Jul",
+      "8": "Aug",
+      "9": "Sep",
+      "10": "Oct",
+      "11": "Nov",
+      "12": "Dec",
+    };
+    return months[date.getMonth() + 1] + " " + (date.getDate() + 1);
+  }
+
   getChartData() {
     fetch(
       "https://api.covid19api.com/live/country/united-states/status/confirmed"
@@ -9,38 +39,32 @@ class ActiveCasesLineChart extends Component {
       .then((res) => res.json())
       .then(
         (result) => {
-          const fileteredData = result.Countries.map((data) => {
-            return {
-              Date: data.Date,
-              Active: data.Active,
-            };
-          }).reduce((rv, x) => {
-            const item = rv.find((i) => i.Date === x.Date);
-            if (item) {
-              item.Active += x.Active;
-            } else {
-              rv.push(x);
-            }
-            return rv;
-          }, []);
+          const filteredData = result
+            .map((data) => {
+              return {
+                Date: data.Date,
+                Active: data.Active,
+              };
+            })
+            .reduce((rv, x) => {
+              const item = rv.find((i) => i.Date === x.Date);
+              if (item) {
+                item.Active += x.Active;
+              } else {
+                rv.push(x);
+              }
+              return rv;
+            }, []);
 
           this.setState({
             chartData: {
-              labels: fileteredData.map((data) =>
-                this.getCountryLabel(data, totalConfirmed)
-              ),
+              labels: filteredData.map((data) => this.getDateLabel(data.Date)),
               datasets: [
                 {
-                  label: "Test",
-                  backgroundColor: fileteredData.map(this.getRandomHex),
-                  hoverBackgroundColor: [
-                    "#501800",
-                    "#4B5000",
-                    "#175000",
-                    "#003350",
-                    "#35014F",
-                  ],
-                  data: fileteredData.map((data) => data.TotalConfirmed),
+                  backgroundColor: "#add8e6",
+                  borderColor: "#003366",
+                  label: "Active Cases",
+                  data: filteredData.map((data) => data.Active),
                 },
               ],
             },
@@ -54,6 +78,14 @@ class ActiveCasesLineChart extends Component {
           });
         }
       );
+  }
+
+  render() {
+    return (
+      <div>
+        <LineChart chartData={this.state.chartData} />
+      </div>
+    );
   }
 }
 

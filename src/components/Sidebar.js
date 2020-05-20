@@ -11,6 +11,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import TopTenPieChart from "./TopTenPieChart";
+import ActiveCasesLineChart from "./ActiveCasesLineChart";
 
 const drawerWidth = 240;
 
@@ -52,12 +53,17 @@ class Sidebar extends Component {
 
   showTopTen = () => this.setState({ show: "top" });
 
+  showActiveCases = () => this.setState({ show: "active" });
+
   render() {
     let content = null;
 
     switch (this.state.show) {
       case "top":
         content = <TopTenPieChart />;
+        break;
+      case "active":
+        content = <ActiveCasesLineChart />;
         break;
       default:
         content = <h1>Select a Chart</h1>;
@@ -87,9 +93,9 @@ class Sidebar extends Component {
                 <ListItemIcon></ListItemIcon>
                 <ListItemText primary="Top 10" />
               </ListItem>
-              <ListItem button>
+              <ListItem button onClick={this.showActiveCases}>
                 <ListItemIcon></ListItemIcon>
-                <ListItemText primary="Another Test" />
+                <ListItemText primary="Active Cases" />
               </ListItem>
             </List>
             <Divider />

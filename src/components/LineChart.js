@@ -5,7 +5,7 @@ class LineChart extends Component {
   render() {
     return (
       <div>
-        <Line />
+        <Line data={this.props.chartData} />
       </div>
     );
   }
