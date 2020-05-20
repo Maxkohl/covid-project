@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -37,48 +37,73 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ClippedDrawer() {
-  const classes = useStyles();
+const classes = useStyles;
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Covid-19 Information
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <Toolbar />
-        <div className={classes.drawerContainer}>
-          <List>
-            {["Top 10", "Starred", "Send email", "Drafts"].map(
-              (text, index) => (
-                <ListItem button key={text}>
-                  <ListItemIcon></ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              )
-            )}
-          </List>
-          <Divider />
-        </div>
-      </Drawer>
-      <main className={classes.content}>
-        <Toolbar />
-        <PieChart
-          title="Top 10 Countries with Confirmed Cases"
-          //   chartData={this.state.chartData}
-        />
-      </main>
-    </div>
-  );
+class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: "true",
+      show: null,
+    };
+  }
+
+  handleToggle = () => this.setState({ open: !this.state.open });
+
+  showTopTen = () => this.setState({ show: "top" });
+
+  render() {
+    let content = null;
+
+    switch (this.state.show) {
+      case "top":
+        content = (
+          <PieChart chartData={this.props.chartData} title="Top 10 Countries" />
+        );
+        break;
+      default:
+        content = <h1>Select a Chart</h1>;
+    }
+
+    return (
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <Typography variant="h6" noWrap>
+              Covid-19 Information
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <Toolbar />
+          <div className={classes.drawerContainer}>
+            <List>
+              <ListItem button onClick={this.showTopTen}>
+                <ListItemIcon></ListItemIcon>
+                <ListItemText primary="Top 10" />
+              </ListItem>
+              <ListItem button>
+                <ListItemIcon></ListItemIcon>
+                <ListItemText primary="Another Test" />
+              </ListItem>
+            </List>
+            <Divider />
+          </div>
+        </Drawer>
+        <main className={classes.content}>
+          <Toolbar />
+          {content}
+        </main>
+      </div>
+    );
+  }
 }
+
+export default Sidebar;

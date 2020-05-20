@@ -105,13 +105,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Card className="card" height="100px" width="100px">
-          <PieChart
-            title="Top 10 Countries with Confirmed Cases"
-            chartData={this.state.chartData}
-          />
-        </Card>
-        <Sidebar />
+        <Sidebar chartData={this.state.chartData} />
         <header className="App-header"></header>
       </div>
     );
