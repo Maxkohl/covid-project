@@ -1,6 +1,30 @@
 import React, { Component } from "react";
-import Chart from "./components/Chart";
+import PieChart from "./components/PieChart";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import { makeStyles } from "@material-ui/core/styles";
+import Sidebar from "./components/Sidebar";
 import "./App.css";
+
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+  },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
+
+const classes = useStyles;
 
 class App extends Component {
   constructor(props) {
@@ -39,7 +63,7 @@ class App extends Component {
             };
           })
             .sort((a, b) => b.TotalConfirmed - a.TotalConfirmed)
-            .slice(0, 11);
+            .slice(0, 10);
 
           const totalConfirmed = fileteredData.reduce(
             (a, b) => a + b.TotalConfirmed,
@@ -81,10 +105,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Chart
-          title="Top 10 Countries with Confirmed Cases"
-          chartData={this.state.chartData}
-        />
+        <Card className="card" height="100px" width="100px">
+          <PieChart
+            title="Top 10 Countries with Confirmed Cases"
+            chartData={this.state.chartData}
+          />
+        </Card>
+        <Sidebar />
         <header className="App-header"></header>
       </div>
     );
